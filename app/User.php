@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
+use App\Models\Ad;
 class User extends Authenticatable
 {
     /**
@@ -25,6 +25,6 @@ class User extends Authenticatable
     ];
 
     public function ads(){
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Ad::class);
     }
 }
