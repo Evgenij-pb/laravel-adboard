@@ -20,7 +20,8 @@ class CreateAdsTable extends Migration
             $table->string('image');
             $table->text('description');
             $table->timestamp('expires_at');
-            $table->boolean('is_verified');
+            $table->boolean('is_verified')->default('false');
+            $table->decimal('price',10);
             $table->timestamps();
 
             $table->foreign('user_id')
@@ -30,7 +31,6 @@ class CreateAdsTable extends Migration
             $table->foreign('category_id')
                 ->references('id')
                 ->on('categories');
-
         });
     }
 
