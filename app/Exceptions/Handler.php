@@ -24,6 +24,31 @@ class Handler extends ExceptionHandler
     ];
 
     /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $exception
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Exception $exception)
+    {
+        if ($this->isHttpException($exception)) {
+
+            if ($exception->getStatusCode() == 404) {
+                return response()->view('errors.' . '404', [], 404);
+            }
+            if ($exception->getStatusCode() == 403) {
+                return response()->view('errors.' . '403', [
+                    'exceptionMsg'=>$exception->getMessage(),
+                ], 403);
+            }
+
+        }
+
+        return parent::render($request, $exception);
+    }
+
+    /**
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
@@ -34,17 +59,5 @@ class Handler extends ExceptionHandler
     public function report(Exception $e)
     {
         parent::report($e);
-    }
-
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
-     */
-    public function render($request, Exception $e)
-    {
-        return parent::render($request, $e);
     }
 }
