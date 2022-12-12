@@ -11,10 +11,29 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'MainController@index');
+Route::get('/search', 'MainController@search')->name('search');
+Route::get('/category-{id}', 'MainController@AllInCategory')->name('allInCategory');
+Route::get('/category-{categoryId}/{adId}', 'MainController@showAd')->name('show');
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/myaccount', 'AdController@index') ->name('userHome');
+Route::post('/myaccount/ad/extend/{ad}', 'AdController@extend') ->name('AdExtend');
+
+Route::group(['prefix'=>'myaccount'],function () {
+    Route::resource('ad', AdController::class);
+});
+
+Route::get('admin', 'AdminController@index')->name('adminHome');
+
+Route::group(['prefix'=>'admin'],function () {
+    Route::resource('ad', AdminController::class);
+});
+
+Route::post('/admin/ad/approve/{ad}','AdminController@approve') ->name('AdApprove');
+
+Route::group(['prefix'=>'admin'],function () {
+    Route::resource('category', CategoryController::class);
+});
+
